@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#5e7d6a">	
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planejador Diário</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="planner">
+<button onclick="iniciarPush()">Ativar Notificações</button>
+<button onclick="ativarNotificacao()">Ativar Alertas</button>
+  <div class="top">
+    <div class="title">
+      <h1>PlanejadorDiário</h1>
+    </div>
+
+    <div class="date-section">
+      <div class="date">
+        Data: <input type="date" id="dateInput">
+      </div>
+
+      <div class="week">
+        <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="left">
+      <div class="table-header">
+        <div class="pill">Hora</div>
+        <div class="pill">Atividade</div>
+      </div>
+      <div class="schedule" id="schedule"></div>
+    </div>
+
+    <div class="right">
+
+      <!-- XP -->
+      <div class="xp-mini">
+        <div>
+          Nível <span id="level">1</span> • 
+          Pontos: <span id="points">0</span>
+        </div>
+        <div class="xp-bar">
+          <div id="xpFill"></div>
+        </div>
+      </div>
+
+      <!-- BOTÕES -->
+      
+      <button class="reset-btn" onclick="resetAll()">Resetar</button>
+      <button class="export-btn" onclick="exportData()">Exportar</button>
+      <button class="import-btn" onclick="document.getElementById('fileInput').click()">Importar</button>
+      <input type="file" id="fileInput" style="display:none" onchange="importData(event)">
+
+      <div class="goal">
+        <div class="pill full">Meta de Hoje</div>
+        <div class="goal-box">
+          <input class="goal-input">
+          <input class="goal-input">
+          <input class="goal-input">
+        </div>
+      </div>
+
+      <div class="todo">
+        <div class="pill full">Lista de Tarefas</div>
+
+        <div class="add-task">
+          <input id="taskInput">
+          <button onclick="addTask()">+</button>
+        </div>
+
+        <ul id="taskList"></ul>
+      </div>
+
+      <div class="todo">
+        <div class="pill full">Tarefas Diárias</div>
+
+        <div class="add-task">
+          <input id="dailyInput">
+          <button onclick="addDaily()">+</button>
+        </div>
+
+        <ul id="dailyList"></ul>
+      </div>
+
+      <div class="notes">
+        <div class="notes-title">Anotações</div>
+        <textarea id="notes"></textarea>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
+</script>	
+</body>
+</html>

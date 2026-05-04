@@ -1,0 +1,230 @@
+body {
+  margin: 0;
+  background: #f3eee6;
+  font-family: Arial, sans-serif;
+  overflow-x: auto;
+}
+
+.planner {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title h1 {
+  color: #5e7d6a;
+  font-size: 40px;
+}
+
+.date-section {
+  color: #5e7d6a;
+  text-align: right;
+}
+
+.week {
+  background: #5e7d6a;
+  color: white;
+  border-radius: 20px;
+  padding: 5px;
+}
+
+.content {
+  display: flex;
+  gap: 20px;
+}
+
+.left { width: 55%; }
+.right { width: 45%; }
+
+.pill {
+  background: #5e7d6a;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+/* 🔥 CORREÇÃO DA TABELA */
+.table-header {
+  display: flex;
+  gap: 5px;
+}
+
+.table-header .pill:first-child {
+  width: 80px;
+  text-align: center;
+}
+
+.table-header .pill:last-child {
+  flex: 1;
+  text-align: center;
+}
+
+.schedule {
+  border-left: 2px solid #5e7d6a;
+  padding-left: 10px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.time {
+  width: 80px;
+  text-align: center;
+  font-size: 12px;
+  color: #5e7d6a;
+}
+
+.activity {
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid #aaa;
+  background: transparent;
+  outline: none;
+  margin-left: 5px;
+}
+
+/* XP */
+.xp-mini {
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #5e7d6a;
+}
+
+.xp-bar {
+  width: 100%;
+  height: 6px;
+  background: #ddd;
+  border-radius: 10px;
+}
+
+#xpFill {
+  height: 100%;
+  width: 0%;
+  background: #f4c542;
+  border-radius: 10px;
+}
+
+/* META */
+.goal-box {
+  border: 2px solid #5e7d6a;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.goal-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #aaa;
+  margin-bottom: 5px;
+  background: transparent;
+}
+
+/* LISTA */
+.add-task {
+  display: flex;
+  margin-top: 10px;
+}
+
+.add-task input {
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid #aaa;
+}
+
+.add-task button {
+  background: #5e7d6a;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  border-bottom: 1px solid #aaa;
+  padding: 5px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  gap: 5px;
+}
+
+.actions button {
+  
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* NOTES */
+.notes {
+  background: #5e7d6a;
+  border-radius: 20px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.notes-title {
+  background: white;
+  border-radius: 20px;
+  text-align: center;
+}
+
+textarea {
+  width: 100%;
+  height: 80px;
+  border: none;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .planner {
+    width: 900px;
+    transform: scale(0.75);
+    transform-origin: top left;
+  }
+}
+
+
+
+.reset-btn, .export-btn, .import-btn {
+  
+  width: 100%;
+  margin: 5px 0;
+  padding: 6px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.reset-btn { background: #c94c4c; }
+.export-btn { background: #5e7d6a; }
+.import-btn { background: #4c6ec9; }
+
+.done span {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
