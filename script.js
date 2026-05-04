@@ -8,7 +8,7 @@ let points = 0;
 // =======================
 const schedule = document.getElementById("schedule");
 
-for (let i = 4; i <= 22; i++) {
+for (let i = 5; i <= 24; i++) {
   let row = document.createElement("div");
   row.className = "row";
 
@@ -166,8 +166,8 @@ function addTask() {
   li.innerHTML = `
     <span contenteditable="true">${input.value}</span>
     <div class="actions">
-      <button onclick="completeTask(this)">✔</button>
-      <button onclick="failTask(this)">✖</button>
+      <button onclick="completeTask(this)">✔️</button>
+      <button onclick="failTask(this)">❌</button>
     </div>
   `;
 
@@ -177,12 +177,13 @@ function addTask() {
 }
 
 function completeTask(btn) {
-  gainXP(10);
+  gainXP(20);
   btn.closest("li").remove();
   saveData();
 }
 
 function failTask(btn) {
+  gainXP(-10);
   btn.closest("li").remove();
   saveData();
 }
@@ -233,6 +234,7 @@ function toggleDaily(btn) {
 
 // ❌ NÃO FEITA
 function failDaily(btn) {
+  gainXP(-10);
   const li = btn.closest("li");
   li.remove();
   saveData();
