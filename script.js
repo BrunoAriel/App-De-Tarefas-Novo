@@ -8,7 +8,7 @@ let points = 0;
 // =======================
 const schedule = document.getElementById("schedule");
 
-for (let i = 5; i <= 24; i++) {
+for (let i = 00; i <= 24; i++) {
   let row = document.createElement("div");
   row.className = "row";
 
@@ -31,8 +31,18 @@ document.addEventListener("input", () => {
 // XP
 // =======================
 function gainXP(amount) {
-  xp += amount;
+
+  // ✅ CORREÇÃO: somar pontos corretamente
   points += amount;
+  if (points < 0) {
+    points = 0;
+  }
+
+  // ✅ CORREÇÃO: impedir XP negativo
+  xp += amount;
+  if (xp < 0) {
+    xp = 0;
+  }
 
   if (xp >= xpMax) {
     xp -= xpMax;
@@ -204,6 +214,7 @@ function addDaily() {
     <div class="actions">
       <button onclick="toggleDaily(this)">✔</button>
       <button onclick="failDaily(this)">✖</button>
+      <button onclick="removeDaily(this)">🗑</button>
     </div>
   `;
 
@@ -212,21 +223,46 @@ function addDaily() {
   saveData();
 }
 
+
+function removeDaily(btn) {
+  const li = btn.closest("li");
+
+  if (!confirm("Remover essa tarefa?")) return;
+
+  li.remove();
+  saveData();
+}
+
+function removeDaily(btn) {
+  const li = btn.closest("li");
+
+  li.style.opacity = "0.5";
+
+  setTimeout(() => {
+    if (confirm("Remover essa tarefa?")) {
+      li.remove();
+      saveData();
+    } else {
+      li.style.opacity = "1";
+    }
+  }, 200);
+}
+
+
 // 🔥 MARCAR / DESMARCAR
 function toggleDaily(btn) {
   const li = btn.closest("li");
   const text = li.querySelector("span");
 
   if (li.classList.contains("done")) {
-    // DESMARCAR
     li.classList.remove("done");
     text.style.textDecoration = "none";
+    text.style.color = "Black";
   } else {
-    // MARCAR
     li.classList.add("done");
     text.style.textDecoration = "line-through";
-
-    gainXP(5); // só ganha quando marca
+    text.style.color = "blue";
+    gainXP(10);
   }
 
   saveData();
@@ -235,11 +271,20 @@ function toggleDaily(btn) {
 // ❌ NÃO FEITA
 function failDaily(btn) {
   gainXP(-10);
+  
   const li = btn.closest("li");
-  li.remove();
+  const text = li.querySelector("span");
+  
+  li.classList.add("failed");
+  
+   if (text) {
+    text.style.color = "red";
+    text.style.textDecoration = "line-through";
+  }
+  
+  
   saveData();
 }
-
 
 // 🔥 DESMARCAR DIÁRIAS AUTOMATICAMENTE
 function checkDailyUncheck() {
@@ -252,76 +297,24 @@ function checkDailyUncheck() {
   }
 }
 
-
-///notificaçãoi 
-function agendarNotificacoesDoDia() {
-  if (Notification.permission !== "granted") return;
-
-  const atividades = document.querySelectorAll(".activity");
-
-  atividades.forEach((input, index) => {
-    const texto = input.value.trim();
-    if (!texto) return;
-
-    const hora = 4 + index; // começa às 4:00
-
-    const agora = new Date();
-    const alvo = new Date();
-
-    alvo.setHours(hora);
-    alvo.setMinutes(0);
-    alvo.setSeconds(0);
-
-    let tempo = alvo - agora;
-
-    if (tempo < 0) return; // já passou
-
-    setTimeout(() => {
-      new Notification("⏰ Hora da atividade", {
-        body: texto
-      });
-    }, tempo);
-  });
-}
-function ativarNotificacao() {
-  Notification.requestPermission().then(p => {
-    if (p === "granted") {
-      agendarNotificacoesDoDia();
-    }
-  });
-}
-
 // 🔥 DESMARCA SEM APAGAR
 function uncheckDailies() {
   document.querySelectorAll("#dailyList li").forEach(li => {
+    
     li.classList.remove("done");
 
+    li.classList.remove("failed");
+
     const span = li.querySelector("span");
-    if (span) span.style.textDecoration = "none";
+    
+    if (span) {
+      span.style.textDecoration = "none"; // tira risco
+      span.style.color = "Black"; // volta cor normal
+    }
+    
   });
 
   saveData();
-}
-
-// 🔔 INICIAR PUSH
-async function iniciarPush() {
-  const permission = await Notification.requestPermission();
-
-  if (permission !== "granted") {
-    alert("Permissão negada!");
-    return;
-  }
-
-  const messaging = firebase.messaging();
-
-  const token = await messaging.getToken({
-    vapidKey: "SUA_VAPID_KEY"
-  });
-
-  console.log("TOKEN:", token);
-
-  // salvar token (opcional)
-  localStorage.setItem("pushToken", token);
 }
 
 // 🔥 DATA ATUAL + DIA DA SEMANA
@@ -329,7 +322,6 @@ function setTodayDate() {
   const dateInput = document.getElementById("dateInput");
   const today = new Date();
 
-  // formato YYYY-MM-DD (input date precisa disso)
   const formatted = today.toISOString().split("T")[0];
   dateInput.value = formatted;
 
@@ -353,6 +345,19 @@ function highlightDay(dayIndex) {
   }
 }
 
+//note//
+const notes = document.getElementById("notes");
+
+function autoGrow(element) {
+  element.style.height = "auto";
+  element.style.height = element.scrollHeight + "px";
+}
+
+// crescer enquanto digita
+notes.addEventListener("input", () => {
+  autoGrow(notes);
+});
+
 // =======================
 // SALVAR
 // =======================
@@ -364,13 +369,18 @@ function saveData() {
 // CARREGAR
 // =======================
 function loadData() {
+  
+  setTimeout(() => {
+  autoGrow(document.getElementById("notes"));
+  }, 0);
+  
+  
   const data = JSON.parse(localStorage.getItem("plannerData"));
   if (!data) return;
   applyData(data);
 }
 
-agendarNotificacoesDoDia();
 loadData();
 checkDailyUncheck();
-setTodayDate(); // 🔥 aqui
+setTodayDate();
 updateXP();
